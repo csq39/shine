@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.rain.modules.ship.delivery.DeliveryDao">
+	
+	<!-- 随货同行单列表 -->
+	<select id="queryDeliveryList" resultType="rdata" parameterType="page">
+		SELECT rownum "num",t.* from(
+		SELECT distinct do.billcode				"id",
+		       do.billcode			"billcode",
+		       DO.SALE_BILLCODE "deliveryBillcode",
+		       (select t.label from COM_DICT t WHERE t.type='cargotype' and t.code =do.output_status)		"outputStatus",
+		       (select t.label from COM_DICT t WHERE t.type='custid' and t.code =do.custid)		"custid",
+		        (select t.label from COM_DICT t WHERE t.type='materialType' and t.code =do.material_type)		"materialType",
+		       do.output_status		"status",
+		       do.saler_phone		"salerPhone",
+		       do.saler				"saler",
+		       do.shipper			"shipper",
+		       do.consignee			"consignee",
+		       do.cnee_town	||'/'|| do.cnee_county		"cneeTown",
+		       do.cnee_add			"cneeAdd",
+		       do.type				"type",
+		       do.cnee_contacts||'/'|| do.cnee_mobile		"cneeContacts",
+		       (decode( do.type,1,'OTMS',NVL(do.carrier, 'SF')))			"carrier"
+		  FROM delivery_order do
+		  WHERE 1=1
+		<if test="param.outputStatus != '-1' and param.outputStatus != ''">
+		 AND  do.output_status = trim(#{param.outputStatus})
+		</if>
+		<if test="param.materialType != '-1' and param.materialType != ''">
+		 AND  do.material_type = trim(#{param.materialType})
+		</if>
+		<if test="param.carrier != '-1' and param.carrier != ''">
+		 AND (decode( do.type,1,'OTMS',NVL(do.carrier, 'SF'))) = trim(#{param.carrier})
+		</if>
+    	 <if test="param.billcode != null and param.billcode != ''">
+		 AND  do.billcode like  '%' || trim(#{param.billcode}) || '%'
+		</if>
+		order by do.billcode  desc
+		)t
+		
+		
+	</select>	
+	
+	<!-- 随货同行单列表 -->
+	<select id="queryDeliveryMasterForSend" resultType="rdata"	 parameterType="rdata">
+		SELECT distinct do.billcode          "erpNumber",
+		       do.billcode          "clientReferenceNumber",
+		       do.output_status		"status",
+		       do.type				"type",
+		       do.org_code          "branch",
+		       do.shipper           "shipFromCompanyName",
+		       do.shpr_province     "shipFromProvince",
+		       do.shpr_town         "shipFromTown",
+		       do.shpr_county       "shipFromCounty",
+		       do.shpr_add          "shipFromAddress",
+		       do.shpr_contacts     "shipFromContactName",
+		       do.shpr_phone        "shipFromContactPhone",
+		       do.shpr_area_code    "shipFromContactPhoneAreaCode",
+		       do.shpr_mobile||';'||do.saler_phone       "shipFromContactMobile",
+		       do.consignee         "shipToCompanyName",
+		       do.cnee_province     "shipToProvince",
+		       do.cnee_town         "shipToTown",
+		       do.cnee_county       "shipToCounty",
+		       do.cnee_add          "shipToAddress",
+		       do.cnee_contacts     "shipToContactName",
+		       do.cnee_phone        "shipToContactPhone",
+		       do.cnee_area_code    "shipToContactPhoneAreaCode",
+		       do.cnee_mobile       "shipToContactMobile",
+		       to_char(do.shipment_date + 8 / 24, 'yyyy-mm-dd' )|| 'T' || to_char(do.shipment_date + 8 / 24, 'HH24:mi:ss') "pickupDate",
+		       to_char(do.shipment_date ,'yyyy-mm-dd HH24:mi:ss') "pickupDateec",
+		       to_char(do.shipment_timea + 8 / 24, 'yyyy-mm-dd' )|| 'T' || to_char(do.shipment_timea + 8 / 24, 'HH24:mi:ss') "pickupTimeFrom",
+			   to_char(do.shipment_timeb + 8 / 24, 'yyyy-mm-dd' )|| 'T' || to_char(do.shipment_timeb + 8 / 24, 'HH24:mi:ss')  "pickupTimeTo",
+		       to_char(do.delivery_date + 8 / 24, 'yyyy-mm-dd' )|| 'T' || to_char(do.delivery_date + 8 / 24, 'HH24:mi:ss')  "deliveryDate",
+		       to_char(do.delivery_date,'yyyy-mm-dd HH24:mi:ss')  "deliveryDateec",
+		       to_char(do.delivery_timea + 8 / 24, 'yyyy-mm-dd' )|| 'T' || to_char(do.delivery_timea + 8 / 24, 'HH24:mi:ss') "deliveryTimeFrom",
+		       to_char(do.delivery_timeb + 8 / 24, 'yyyy-mm-dd' )|| 'T' || to_char(do.delivery_timeb + 8 / 24, 'HH24:mi:ss') "deliveryTimeTo",
+		       (select sum(dob.quantity)     
+      			  from delivery_order_b dob
+                 where do.id=dob.delivery_id) "quantity",
+		       do.custid     		"custid",
+		       do.custid     		"customtext26",
+		       do.sale_billcode     "customtext1",
+		       to_char(do.ordertime + 8 / 24, 'yyyy-mm-dd' )|| 'T' || to_char(do.ordertime + 8 / 24, 'HH24:mi:ss')     "customtext2",
+		       do.saler             "customtext3",
+		       do.saler_phone       "customtext4",
+		       do.documentmaker     "customtext5",
+		       do.consignee      "customtext7",
+		       to_char(do.documents_time + 8 / 24, 'yyyy-mm-dd' )|| 'T' || to_char(do.documents_time + 8 / 24, 'HH24:mi:ss')    "customtext6", 
+		       to_char(do.documents_time ,'yyyy-mm-dd HH24:mi:ss')    "customtext6ec", 
+		       do.material_type     "customtext10",
+		       do.remarks           "customtext9",
+		       do.taxpayer_code     "customtext11",
+		       do.channel_code      "customtext12",
+		       do.channel_name      "customtext13",
+		       do.branch_office     "customtext14",
+		       do.remarks           "customtext18",
+		       do.warehouse         "customtext19",  
+		       do.reserved1         "customtext20",
+		       do.reserved2         "customtext21",
+		       do.reserved3         "customtext22"
+		  FROM delivery_order do
+		 WHERE do.billcode=#{billcode}
+		 AND  ROWNUM=1
+	</select>	
+	
+	<update id="setDeliveryMasterCustid" parameterType="rdata">
+		UPDATE delivery_order
+		   SET carrier =#{carrier},
+		       custid= (SELECT custid
+					    FROM cargo_draft cd
+						where cd.delivery_billcode=#{billcode}
+						and    rownum = 1),
+		       type= #{type}
+		 WHERE billcode=#{billcode}
+	</update>	
+	
+	<!-- 写入是默认值为0， -->
+	<select id="queryDeliveryListForSend" resultType="rdata"	 parameterType="rdata">
+		  SELECT do.billcode   "billcode"
+		  FROM delivery_order do
+		 WHERE do.type=1
+		   AND (do.output_status=0 or do.output_status=1)
+	</select>	
+	
+	<!-- 随货同行单列表 -->
+	<select id="queryDeliveryDetailForSend" resultType="rdata"	 parameterType="rdata">
+		SELECT rownum "seq",t.* from(
+		SELECT  distinct	dob.material_code "productCode",
+				dob.material_name "productName",
+				dob.quantity "quantity",
+				dob.unit "unit",
+				dob.weight "unitWeight",
+				do.billcode "billcode",
+				dob.material_batch "materialBatch",
+				dob.release_date "releaseDate",
+				dob.expiring_date "expiringDate",
+				dob.weight * dob.quantity "weight",
+				dob. VOLUME * dob.quantity "volume"
+		   FROM	delivery_order_b dob,
+				delivery_order do
+		  WHERE	dob.delivery_id = do.id
+			AND do.billcode =  #{billcode})t
+	</select>	
+	
+	<!-- 更新共同代码 -->
+	<update id="updateDeliveryByWs" parameterType="rdata">
+		UPDATE 	delivery_order
+		   SET 	output_status      	= trim(#{outputStatus}),
+   				output_msg  = trim(#{outputMsg}),
+   				<if test="transportNo != ''">
+   				transport_no  = trim(#{transportNo}),
+   				</if>
+   				update_date = sysdate
+    	 WHERE 	billcode 	= #{billcode}
+	</update>
+	
+	
+</mapper>

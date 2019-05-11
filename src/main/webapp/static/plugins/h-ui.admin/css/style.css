@@ -1,0 +1,41 @@
+@charset "utf-8";
+/* 你自己的样式 */
+
+.p-right5{padding-right: 5px!important;}
+.m-riht5{margin-right: 5px!important;}
+
+.w400{width: 400px!important;}
+.w330{width: 330px!important;}
+.w300{width: 300px!important;}
+.w250{width: 250px!important;}
+.w200{width: 200px!important;}
+.w160{width: 160px!important;}
+.w140{width: 140px!important;}
+.w120{width: 120px!important;}
+.w100{width: 100px!important;}
+.w80{width: 80px!important;}
+
+.f_left{float:left;}
+.f_right{float:right;}
+
+body{font-size:13px;}
+a, a:active, a:hover, a:focus, a:visited {text-decoration:none}  
+
+.mb-50{margin-bottom: 50px!important;}
+
+.font-bold{font-weight: 600;}
+
+/* pagination */
+.paging_full_numbers{line-height: 36px!important;}
+.dataTables_info{color: #888;font-size: 12px;font-weight:normal;padding: 0 16px; clear: both;vertical-align: middle;display: inline-block;zoom: 1;}
+
+
+.red {color: #f00;}
+.blue {color: #316FC9;}
+.grey{color: rgb(179, 179, 179)}
+.default{color: #e6e6e6;}
+.danger-color, .danger{color: #dd514c;}
+.warning, .warning-color{color: #f37b1d;}
+.green{color: #5eb95e;}
+
+.label{font-weight: normal;}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.rain.modules.sys.main.MainDao">
+	
+	<!-- 查询是否维护组织信息 -->
+	<select id="hasOrgMaintain" resultType="rdata" parameterType="rdata" >
+		SELECT *
+		  FROM tb_org org
+		 WHERE org.org_id = #{orgId}
+		   AND org.infostatus = 'Y'
+		   AND org.del_flag = 'N'
+	</select>
+	
+	<!-- 查询用户组织信息 -->
+	<select id="RetrieveOrgInfo" resultType="rdata" parameterType="rdata" >
+		SELECT org.org_name "orgName", org.org_type "orgType", org.org_type_id "certificateTypeId"
+		  FROM tb_org org
+		 WHERE org.org_id = #{orgId}
+	</select>
+	
+<!-- 企业对应医院个数 -->
+<!-- 	<select id="getPieSupplier" parameterType="rdata" resultType="rdata"> -->
+<!-- 		SELECT  p.province_name       		"name", -->
+<!--         		count(o.office_provinceid)  "value" -->
+<!-- 		FROM tb_business_partner bp, -->
+<!-- 		     com_user cu , -->
+<!-- 		     tb_province p, -->
+<!-- 		     tb_org o -->
+<!-- 		WHERE cu.org_id = bp.partner_id  -->
+<!-- 		AND   o.org_id = bp.org_id -->
+<!-- 		AND   p.province_id = o.office_provinceid -->
+<!-- 		AND   cu.user_id = #{currentUser} -->
+<!-- 		GROUP BY p.province_name -->
+<!-- 	</select> -->
+	
+<!-- 医院对应企业个数 -->
+<!-- 	<select id="getPieHosp" parameterType="rdata" resultType="rdata"> -->
+<!-- 		SELECT  p.province_name       		"name", -->
+<!--         		count(o.office_provinceid)  "value" -->
+<!-- 		FROM tb_business_partner bp, -->
+<!-- 		     com_user cu , -->
+<!-- 		     tb_province p, -->
+<!-- 		     tb_org o -->
+<!-- 		WHERE cu.org_id = bp.org_id  -->
+<!-- 		AND   o.org_id = bp.partner_id -->
+<!-- 		AND   p.province_id = o.office_provinceid -->
+<!-- 		AND   cu.user_id = #{currentUser} -->
+<!-- 		GROUP BY p.province_name -->
+<!-- 	</select> -->
+	
+<!-- 获取12个月订单数量 -->
+<!-- 	<select id="getLineSupplier" parameterType="rdata" resultType="rdata"> -->
+<!-- 		SELECT count(om.sup_id)    "value" -->
+<!-- 		FROM 	tb_order_mst om, -->
+<!-- 		     	com_user cu -->
+<!-- 		WHERE om.sup_id = cu.org_id -->
+<!-- 		AND   cu.user_id = #{currentUser} -->
+<!-- 		AND   om.create_date = to_date(#{data},'yyyy-mm') -->
+<!-- 	</select> -->
+	
+<!-- 获取12个月订单数量 -->
+<!-- 	<select id="getLineHosp" parameterType="rdata" resultType="rdata"> -->
+<!-- 		SELECT count(om.sup_id)    "value" -->
+<!-- 		FROM 	tb_order_mst om, -->
+<!-- 		     	com_user cu -->
+<!-- 		WHERE om.hop_id = cu.org_id -->
+<!-- 		AND   cu.user_id = #{currentUser} -->
+<!-- 		AND   om.create_date = to_date(#{data},'yyyy-mm') -->
+<!-- 	</select> -->
+	
+</mapper>

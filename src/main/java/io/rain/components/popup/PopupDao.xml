@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.rain.components.popup.PopupDao">
+	
+	<!-- 获取所有物资分类树 -->
+	<select id="queryMaterialCategoryPopup" resultType="rdata">
+		SELECT distinct temp.material_category_parent_code "pId",
+                temp.material_category_code        "id",
+                temp.material_category_code||temp.material_category_name      "name"
+          FROM (SELECT material_category_code,
+               		   material_category_parent_code,
+                       material_category_name,
+                       SYS_CONNECT_BY_PATH(material_category_name, '\') path
+          FROM tb_material_category
+         WHERE del_flag = 'N'
+         AND   length(material_category_code)=4
+       connect by prior material_category_parent_code = material_category_code) temp
+         WHERE 1=1 
+         <if test="treeLvl != null and treeLvl != ''">
+			AND (#{treeLvl}+1)>length(temp.material_category_code)
+		</if>
+         <if test="popSearch != null and popSearch != ''">
+		 AND temp.path like  '%' || trim(#{popSearch}) || '%'
+		</if>
+         ORDER BY   temp.material_category_code asc
+	</select>	
+	
+	
+</mapper>

@@ -1,0 +1,205 @@
+@charset "utf-8";
+/* 
+author: SeinaLiu
+addtime:2017/11/27 
+*/
+
+/* 医疗机构注册 */
+.register{
+    background: url(register-bg.jpg) repeat;
+    width: 100%;
+    position: relative;
+}
+.register .type-choose{
+    width: 700px;
+    height: 160px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0
+}
+.register .type-choose li{
+    float: left;
+    width: 33.33%;
+}
+.register .type-choose .org-type{
+    width: 140px;
+    height: 140px;
+    display: block;
+    margin: 8px auto;
+    text-align: center;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+}
+.register .org-type img{
+    height: 80px;
+    padding-top: 12px;
+}
+.org-type.type1{border-color: #7AC4E7;}
+.org-type.type2{border-color: #FD9827;}
+.org-type.type3{border-color: #b099de;}
+.org-type h6{font-weight: 500;margin-top: 10px;}
+.org-type.type1 h6{color: #7AC4E7;}
+.org-type.type2 h6{color: #FD9827;}
+.org-type.type3 h6{color: #b099de;}
+
+
+.register .layui-main{padding: 20px;}
+.layui-elem-field legend{
+    font-size: 17px;
+    font-weight: 400;
+}
+.layui-badge-dot {
+    width: 5px;
+    height: 5px;
+    padding: 0;
+    border-radius: 50%;
+    margin-right: 5px;
+    margin-top: -3px;
+    vertical-align: middle;
+}
+.layui-form-item{padding: 0 20px;}
+.layui-form-label{
+    width: 100px;
+    font-weight: 300;
+}
+.layui-input-block{margin-left: 130px;}
+.register a.reg-hos-type{border-color: #e6e6e6;}
+.register .reg-hos-type.cur{
+    color: #7AC4E7;
+    position: relative;
+    border-color: #7AC4E7!important;
+}
+.register a.cur i{
+    position: absolute;
+    right: -4px;
+    bottom: -5px;
+    margin: 0;
+    line-height: 16px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #fff;
+}
+.register .reg-upload a{
+    color: #CBCBCB;
+    display: block;
+    width: 240px;
+    height: 140px;
+    font-size: 18px;
+    line-height: 140px;
+    border-radius: 10px;
+    border: 2px dashed #e6e6e6;
+    background-color: transparent;
+}
+.register .reg-code{
+    background-color: #7AC4E7;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+}
+.register .register-1{background-color: #7AC4E7;}
+.register .reg-1-success{
+    text-align: center;
+    margin: auto;
+    width: 600px;
+    height: 200px;
+    margin-top: 85px;
+}
+.register .reg-1-success img{width: 110px;}
+.register .register-1-down{
+    display: block;
+    background-color: #7AC4E7;
+    color: #fff;
+    margin: auto;
+    margin-top: 30px;
+    width: 160px;
+    border-radius: 5px;
+    height: 35px;
+    line-height: 35px;
+}
+
+
+.register .reg-guide li{
+    float: left;
+    width: 33.33%;
+    margin: 40px 0 20px;
+    text-align: center;
+}
+.register .reg-guide li img{width: 90%;}
+.register .success-tip{
+    color: #999;
+    font-size: 15px;
+    margin-top: 30px;
+}
+
+/* 企业注册 */
+.register .lay-pro {
+    padding-left: 30px;
+    margin-bottom: 40px;
+    color: #999;
+}
+
+.register .reg-org{background-color: #fd9827;}
+.register a.reg-qy-type, .register a.reg-zz-type{border-color: #e6e6e6;}
+.register .reg-qy-type.cur, .register a.reg-zz-type.cur {
+    color: #fd9827;
+    position: relative;
+    border-color: #fd9827!important;
+}
+
+/* 完善企业信息 */
+.layui-form-item .hos-all{
+    width: 160px;
+    padding-bottom: 20px;
+}
+.hint {
+    font-size: 12px;
+    line-height: 16px;
+    color: #BBB;
+    margin-top: 10px;
+}
+.range-tree{
+    font-size: 13px;
+    color: #666;
+}
+.range-tree .border{
+    border: 1px solid #e6e6e6;
+    background-color: #fff;
+    width: 300px;
+    height: 185px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+.already-img img{
+    height: 140px;
+}
+
+/* preloader */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #e4e7ea; 
+    z-index: 10000; 
+    opacity: .6;
+}
+#status {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 50%; 
+    top: 50%;
+    margin: -15px 0 0 -15px;
+    font-size: 32px;
+}
+
+
+
+

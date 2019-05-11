@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.rain.components.docLog.DocLogCommon">
+
+	<select id="queryDocLog" parameterType="rdata" resultType="rdata">
+		SELECT 	  ROW_NUMBER()OVER(ORDER BY dol.create_date DESC) 									"num",
+				  dol.status_name																	"statusName",		
+				  dol.remarks            			  												"remarks",
+				  to_char(dol.create_date,'yyyy-MM-dd hh24:mi:ss') 									"date",
+				  dol.op_user_name						  											"userName"
+		  FROM	  tb_doc_op_log  dol
+		 WHERE    doc_id=#{dispatchMstId}
+	</select>
+	
+	<insert id="" parameterType="rdata">
+		insert into tb_doc_op_log(
+					op_log_id            , 
+					org_id               , 
+					doc_id               , 
+					status_name          , 
+					status_code          , 
+					transaction_type_code, 
+					op_user_id           , 
+					op_user_name         , 
+					remarks              , 
+					del_flag             , 
+					create_by            , 
+					create_date          
+			)values(
+					seq_doc_op_log.nextval,
+					#{orgId},
+					#{docId},
+					#{statusName},
+					#{statusCode},
+					#{transactionTypeCode},
+					'',
+					#{currentUser},
+					#{remarks},
+					'N',
+					#{currentUser},
+					sysdate
+			)
+	</insert>
+	
+</mapper>

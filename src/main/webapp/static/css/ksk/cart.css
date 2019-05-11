@@ -1,0 +1,48 @@
+@charset "utf-8";
+
+/* 购物车部分 */
+.nc-toolbar-wrap {position: fixed;_position: absolute;top: 0;right: 0;z-index: 100;width: 0;bottom: 0;}
+.nc-toolbar {position: absolute;right: -535px;top: 0;width: 530px;bottom: 0;border: 5px solid #483E39;background-color: #fff;border-radius: 5px;}
+
+.nc-toolbar-tabs {position: absolute;top: 40%;left: -35px;width: 35px;}
+.nc-toolbar-tab {position: relative;width: 35px;height: 70px;margin-bottom: 1px;cursor: pointer;background-color: #483E39;-webkit-border-radius: 3px 0 0 3px;-moz-border-radius: 3px 0 0 3px;border-radius: 3px 0 0 3px;}
+.nc-toolbar-tab .tab-ico {display: inline-block;background-image: url(../images/toolbar_bg.png);background-repeat: no-repeat;}
+.nc-tbar-tab-cart .tab-ico {background-position: 0 -50px;width: 34px;height: 35px;margin-left: 1px;position: relative;z-index: 2;background-color: #483E39;}
+.nc-tbar-tab-cart .tab-num{height: 30px;text-align: center;color: #fff;line-height: 24px;}
+.nc-tbar-tab-cart .tab-num span{display: inline-block;background-color: #e45253;width: 25px;height: 25px;border-radius: 6px;font-size: 12px;}
+
+.redgoods{height: 15px;width: 15px;height: 10px\9;width: 10px\9;border-radius: 10px;background-color: #e45253;position: fixed;top:10px;left: 100px;z-index: 999;}
+.backlay {z-index: 99;width: 100%;height: 100%;position: fixed;left: 0;top: 0;}
+
+.ksk-cart{height:100%;overflow:auto;background-color:#e6e6e6;}
+.cart-panel-header{padding: 10px;font-size: 14px;border-bottom: 1px solid #eee;background-color: #fff;}
+/* .cart-panel-list{margin-bottom: 50px;} */
+.cart-panel-list tr{border-bottom: 1px solid #eee;background-color: #fff;}
+.cart-panel-list tr:last-child{border-bottom: none;}
+
+.cart-footer{position: absolute;bottom: 0;left: 0;right: 0;height: 40px;background-color: #483E39;line-height: 40px;color: #fff;font-size: 15px;font-weight: 600;}
+.cart-footer .buy{background-color: #e45253;cursor: pointer;width: 130px;height: 40px;text-align: center;font-weight: 400;}
+
+/* 采购单预览 */
+.purchase .address{border: 1px solid #ddd;padding: 5px 25px;}
+
+/* 订单详情 */
+.ft-order-step{display:inline-block;margin: 21px 15px;}
+.ncsc-order-step { font-size: 0; *word-spacing:-1px/*IE6、7*/; margin-top: 0; position: relative; z-index: 1;}
+.ncsc-order-step dl { font-size: 12px; line-height: 20px; background: url(../images/ncsc_bg_img.png) no-repeat -390px 0; vertical-align: top; letter-spacing: normal; word-spacing: normal; display: inline-block; *display: inline/*IE7*/; width: 210px; height: 36px; margin: 30px 0 30px -1px; position: relative; z-index: auto; *zoom: 1/*IE7*/;}
+.ncsc-order-step dl.step-first { background-position: -340px 0; width: 36px; margin-left: 50px;}
+.ncsc-order-step dl.long { background-position: -215px -170px; width: 385px;}
+.ncsc-order-step dl dt { font-weight: 600; text-align: center; min-width: 60px; position: absolute; z-index: 1; top: -30px; right: -12px;}
+.ncsc-order-step dl.current dt { color: #27A9E3;}
+.ncsc-order-step dl dd.bg { background: url(../images/ncsc_bg_img.png) no-repeat -385px -40px; display: none; width: 215px; height: 36px; position: absolute; z-index: 1; top: 0; right: 0;}
+.ncsc-order-step dl.step-first dd.bg { background-position: -340px -40px; width: 36px;}
+.ncsc-order-step dl.long dd.bg { background-position: -210px -210px; width: 390px;}
+/* .ncsc-order-step dl dd.date { font: 12px/20px Tahoma, Arial; color: #999; text-align: center; display: none; width: 120px; position: absolute; z-index: 2; bottom: -40px; right: -42px;} */
+.ncsc-order-step dl.current dd { display: block;}
+
+/* 确认收货 */
+.order-num{border-bottom: 1px solid #eee;padding: 5px 0;color: #EE6969;}
+
+
+
+

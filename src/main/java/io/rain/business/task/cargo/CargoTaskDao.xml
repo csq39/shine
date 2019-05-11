@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.rain.business.task.cargo.CargoTaskDao">
+
+	<select id="queryKunchuanCargoMaster" resultType="rdata" parameterType="rdata">
+		SELECT DISTINCT b.extnum1   "id", 
+						a.transnum  "billcode", 
+						b.extnum1   "deliveryBillcode"
+		  FROM dbm.wl_transline a
+		 INNER join dbm.wl_trans b
+		    ON a.transnum = b.transnum
+		 WHERE (b.transtype = '201')
+		   AND (a.lotnum != 'n')
+		   AND (b.extnum1 is not null)
+		   AND (convert(varchar(100), b.finishdate, 23) =convert(varchar(100), getdate(), 23))
+		   AND ((SELECT count(1) as num
+		           FROM zznnum2 c
+		          WHERE c.transnum = a.transnum
+		            AND c.linenum = a.linenum) = 0)
+	</select>
+	
+	<!-- 插入到资质审批表 -->
+	<select id="queryKunchuanCargoDetail" resultType="rdata" parameterType="rdata">
+		SELECT A.TRANSNUM "id",
+		       A.TRANSNUM "cargoId",
+		       A.LINENUM "hanghao",
+		       b.extnum1   "deliveryBillcode",
+		       '' "deliveryRownum",
+		       B.BINNUM "orgCode",
+		       REPLACE(A.ITEMNUM, '.', '') AS "materialCode",
+		       A.ITEMDESC "materialName",
+		       A.ITEMTYPE "materialType",
+		       A.ISSUEUNIT "unit",
+		       A.ACT_ITEMQTY "quantity",
+		       '' "volume",
+		       '' "weight",
+		       CASE charindex('/', A.LOTNUM)
+		         WHEN 0 THEN
+		          A.LOTNUM
+		         ELSE
+		          SUBSTRING(A.LOTNUM, 1, charindex('/', A.LOTNUM))
+		       END AS "batch",
+		       '' "releaseDate",
+		       '' "expiringDate",
+		       '' "remarks",
+		       '' "billStatus"
+		  FROM DBM.WL_TRANSLINE A
+		 INNER JOIN DBM.WL_TRANS B
+		    ON A.TRANSNUM = B.TRANSNUM
+		 WHERE (B.TRANSTYPE = '201')
+		   AND (A.LOTNUM != 'N')
+		   AND (B.EXTNUM1 IS NOT NULL)
+		   AND (CONVERT(VARCHAR(100), B.FINISHDATE, 23) =
+		       CONVERT(VARCHAR(100), GETDATE(), 23))
+		   AND ((SELECT COUNT(1) AS NUM
+		           FROM ZZNNUM2 C
+		          WHERE C.TRANSNUM = A.TRANSNUM
+		            AND C.LINENUM = A.LINENUM) = 0)
+	</select>
+	
+	<!-- 插入到资质审批表 -->
+	<select id="queryKunchuanDeliveryDetail" resultType="rdata" parameterType="rdata">
+		 select dob.volume "volume",
+		        dob.weight "weight",
+		        to_char(dob.release_date, 'yyyy-mm-dd HH24:mi:ss') "releaseDate",
+		        to_char(dob.expiring_date, 'yyyy-mm-dd HH24:mi:ss') "expiringDate"
+		   from delivery_order do, delivery_order_b dob
+		  where do.id = dob.delivery_id
+		   and do.billcode = #{deliveryBillcode}
+		   and dob.material_code= #{materialCode}
+		   and dob.material_batch= #{batch}
+		   and rownum=1
+	</select>
+	
+	<!-- 更新共同代码 -->
+	<insert id="updateKunchuanCargoDetail" parameterType="rdata">
+			INSERT INTO zznnum2(
+				transnum,
+				linenum)
+		VALUES (#{cargoId},
+			    #{hanghao})
+	</insert>
+	
+	<insert id="addCargoMaster" parameterType="rdata">
+		INSERT INTO cargo_draft(
+				id,
+				import_id,
+				billcode,
+				custid,
+				delivery_billcode,
+				create_date,
+				create_by)
+		VALUES (SEQ_cargo_draft.nextval,
+			    #{id},
+				trim(#{billcode}),
+				trim(#{custid}),
+				trim(#{deliveryBillcode}),
+				sysdate,
+				'system'
+				)
+	</insert> 
+	
+		<insert id="addCargoMasterHK" parameterType="rdata">
+		insert into cargo_draft(
+				id,
+				import_id,
+				billcode,
+				custid,
+				delivery_billcode,
+				org_code,
+				type,
+				carrier_id,
+				driver,
+				mobile,
+				sale_billcode,
+				shipper,
+				ordertime,
+				shpr_province,
+				shpr_town,
+				shpr_county,
+				shpr_add,
+				shpr_contacts,
+				shpr_phone,
+				shpr_area_code,
+				shpr_mobile,
+				consignee,
+				cnee_province,
+				cnee_town,
+				cnee_county,
+				cnee_add,
+				cnee_contacts,
+				cnee_phone,
+				cnee_area_code,
+				cnee_mobile,
+				saler,
+				saler_phone,
+				documentmaker,
+				documents_time,
+				shipment_date,
+				shipment_timea,
+				shipment_timeb,
+				delivery_date,
+				delivery_timea,
+				delivery_timeb,
+				remarks,				
+				create_date,
+				create_by)
+		values (seq_cargo_draft.nextval,
+			    #{id},
+				trim(#{billcode}),
+				trim(#{custid}),
+				trim(#{deliverybillcode}),
+				trim(#{orgCode}),
+				trim(#{type}),
+				trim(#{carrierId}),
+				trim(#{driver}),
+				trim(#{mobile}),
+				trim(#{saleBillcode}),
+				trim(#{shipper}),				
+				to_date(#{ordertime},'yyyy-mm-dd HH24:mi:ss'),
+				trim(#{shprProvince}),
+				trim(#{shpTown}),
+				trim(#{shprCounty}),
+				trim(#{shprAdd}),
+				trim(#{shprContacts}),
+				trim(#{shprPhone}),
+				trim(#{shprAreaCode}),
+				trim(#{shprMobile}),
+				trim(#{consignee}),
+				trim(#{cneeProvince}),
+				trim(#{cneeTown}),
+				trim(#{cneeCounty}),
+				trim(#{cneeAdd}),
+				trim(#{cneeContacts}),
+				trim(#{cneePhone}),
+				trim(#{cneeAreaCode}),
+				trim(#{cneeMobile}),
+				trim(#{saler}),
+				trim(#{salerPhone}),
+				trim(#{documentmaker}),
+				trim(#{documentsTime}),
+				to_date(#{shipmentDate},'yyyy-mm-dd HH24:mi:ss'),
+				to_date(#{shipmentTimea},'yyyy-mm-dd HH24:mi:ss'),
+				to_date(#{shipmentTimeb},'yyyy-mm-dd HH24:mi:ss'),
+				to_date(#{deliveryDate},'yyyy-mm-dd HH24:mi:ss'),
+				to_date(#{deliveryTimea},'yyyy-mm-dd HH24:mi:ss'),
+				to_date(#{deliveryTimeb},'yyyy-mm-dd HH24:mi:ss'),
+				trim(#{remarks}),
+				sysdate,
+				'system'
+				)
+	</insert> 
+	
+	<insert id="addCargoDetail" parameterType="rdata">
+		INSERT INTO cargo_draft_b(
+				id,
+				import_id,
+				cargo_id,
+				hanghao,
+				material_code,
+				material_name,
+				material_type,
+				unit,
+				quantity,
+				batch,
+				delivery_rownum,
+				org_code,
+				volume,
+				weight,
+				release_date,
+				expiring_date,
+				create_date,
+				create_by)
+		VALUES (#{pkId},
+			    #{id},
+				trim(#{cargoId}),
+				trim(#{hanghao}),
+				trim(#{materialCode}),
+				trim(#{materialName}),
+				trim(#{materialType}),
+				#{unit},
+				#{quantity},
+				#{batch},
+				#{deliveryRownum},
+				#{orgCode},
+				#{volume},
+				#{weight},
+				to_date(#{releaseDate},'yyyy-mm-dd HH24:mi:ss'),
+				to_date(#{expiringDate},'yyyy-mm-dd HH24:mi:ss'),
+				sysdate,
+				'system')
+	</insert> 
+	
+	
+	<!-- 神威接口 start -->
+	<select id="queryShenWeiCargoMaster" resultType="rdata" parameterType="rdata">
+		SELECT
+				id 					"id",
+				billcode 			"billcode",
+				delivery_billcode 	"deliveryBillcode",
+				org_code 			"orgCode",
+				type 				"type",
+				carrier_id 			"carrierId",
+				driver 				"driver",
+				mobile 				"mobile",
+				sale_billcode 		"saleBillcode",
+				shipper 			"shipper",
+				ordertime 			"ordertime",
+				shpr_province 		"shprProvince",
+				shpr_town 			"shpTown",
+				shpr_county 		"shprCounty",
+				shpr_add 			"shprAdd",
+				shpr_contacts 		"shprContacts",
+				shpr_phone 			"shprPhone",
+				shpr_area_code 		"shprAreaCode",
+				shpr_mobile 		"shprMobile",
+				consignee 			"consignee",
+				cnee_province 		"cneeProvince",
+				cnee_town 			"cneeTown",
+				cnee_county 		"cneeCounty",
+				cnee_add 			"cneeAdd",
+				cnee_contacts 		"cneeContacts",
+				cnee_phone 			"cneePhone",
+				cnee_area_code 		"cneeAreaCode",
+				cnee_mobile 		"cneeMobile",
+				saler 				"saler",
+				saler_phone 		"salerPhone",
+				documentmaker 		"documentmaker",
+				documents_time 		"documentsTime",
+				shipment_date 		"shipmentDate",
+				shipment_timea 		"shipmentTimea",
+				shipment_timeb 		"shipmentTimeb",
+				delivery_date 		"deliveryDate",
+				delivery_timea 		"deliveryTimea",
+				delivery_timeb 		"deliveryTimeb",
+				remarks 			"remarks",
+				bill_status 		"billStatus"
+		  FROM  inf_ck_tms_hz hz
+		 WHERE  bill_status = '0'
+	</select>
+	
+	<!-- 插入到资质审批表 -->
+	<select id="queryShenWeiCargoDetail" resultType="rdata" parameterType="rdata">
+		SELECT  id				"id",
+				cargo_id		"cargoId",
+				hanghao			"hanghao",
+				delivery_rownum	"deliveryRownum",
+				org_code		"orgCode",
+				material_code	"materialCode",
+				material_name	"materialName",
+				material_type	"materialType",
+				unit			"unit",
+				quantity		"quantity",
+				volume			"volume",
+				weight			"weight",
+				batch			"batch",
+				to_char(release_date,'yyyy-mm-dd HH24:mi:ss')	"releaseDate",
+				to_char(expiring_date,'yyyy-mm-dd HH24:mi:ss')	"expiringDate",
+				remarks			"remarks",
+				bill_status		"billStatus"
+		  from	inf_ck_tms_mx hz				
+		 WHERE bill_status = '0'
+	</select>
+	
+	<!-- 更新共同代码 -->
+	<update id="updateShenWeiCargoMaster" parameterType="rdata">
+		UPDATE 	inf_ck_tms_hz
+		   SET 	bill_status = '1'
+    	 WHERE 	id 	= #{id}
+	</update>
+	
+	<!-- 更新共同代码 -->
+	<update id="updateShenWeiCargoDetail" parameterType="rdata">
+		UPDATE 	inf_ck_tms_mx
+		   SET 	bill_status = '1'
+    	 WHERE 	id 	= #{id} and hanghao = #{hanghao}
+	</update>
+	<!-- 神威end -->
+	
+	<!-- 汇康 -->	
+	<select id="queryHuiKangCargoMaster" resultType="rdata" parameterType="rdata">
+		SELECT
+				id 					"id",
+				billcode 			"billcode",
+				delivery_billcode 	"deliveryBillcode",
+				org_code 			"orgCode",
+				type 				"type",
+				carrier_id 			"carrierId",
+				driver 				"driver",
+				mobile 				"mobile",
+				sale_billcode 		"saleBillcode",
+				shipper 			"shipper",
+				to_char(ordertime,'yyyy-mm-dd HH24:mi:ss') 			"ordertime",
+				shpr_province 		"shprProvince",
+				shpr_town 			"shpTown",
+				shpr_county 		"shprCounty",
+				shpr_add 			"shprAdd",
+				shpr_contacts 		"shprContacts",
+				shpr_phone 			"shprPhone",
+				shpr_area_code 		"shprAreaCode",
+				shpr_mobile 		"shprMobile",
+				consignee 			"consignee",
+				cnee_province 		"cneeProvince",
+				cnee_town 			"cneeTown",
+				cnee_county 		"cneeCounty",
+				cnee_add 			"cneeAdd",
+				cnee_contacts 		"cneeContacts",
+				cnee_phone 			"cneePhone",
+				cnee_area_code 		"cneeAreaCode",
+				cnee_mobile 		"cneeMobile",
+				saler 				"saler",
+				saler_phone 		"salerPhone",
+				documentmaker 		"documentmaker",
+				documents_time 		"documentsTime",
+				to_char(shipment_date,'yyyy-mm-dd HH24:mi:ss') 		"shipmentDate",
+				to_char(shipment_timea,'yyyy-mm-dd HH24:mi:ss') 		"shipmentTimea",
+				to_char(shipment_timeb,'yyyy-mm-dd HH24:mi:ss') 		"shipmentTimeb",
+				to_char(delivery_date,'yyyy-mm-dd HH24:mi:ss') 		"deliveryDate",
+				to_char(delivery_timea,'yyyy-mm-dd HH24:mi:ss') 		"deliveryTimea",
+				to_char(delivery_timeb,'yyyy-mm-dd HH24:mi:ss') 		"deliveryTimeb",
+				remarks 			"remarks"
+		  FROM  inf_zcd_tms_hz hz
+		 WHERE  bill_status = '0'
+	</select>
+	
+	<!-- 插入到资质审批表 -->
+	<select id="queryHuiKangCargoDetail" resultType="rdata" parameterType="rdata">
+		SELECT  id				"id",
+				cargo_id		"cargoId",
+				hanghao			"hanghao",
+				delivery_rownum	"deliveryRownum",
+				org_code		"orgCode",
+				material_code	"materialCode",
+				material_name	"materialName",
+				material_type	"materialType",
+				unit			"unit",
+				quantity		"quantity",
+				volume			"volume",
+				weight			"weight",
+				batch			"batch",
+				to_char(release_date,'yyyy-mm-dd HH24:mi:ss')	"releaseDate",
+				to_char(expiring_date,'yyyy-mm-dd HH24:mi:ss')	"expiringDate",
+				remarks			"remarks"
+		  from	inf_zcd_tms_mx hz				
+		 WHERE bill_status = '0'
+	</select>
+	
+	<!-- 更新共同代码 -->
+	<update id="updateHuiKangCargoMaster" parameterType="rdata">
+		UPDATE 	inf_zcd_tms_hz
+		   SET 	bill_status = '1'
+    	 WHERE 	id 	= #{id} 
+	</update>
+	
+	<!-- 更新共同代码 -->
+	<update id="updateHuiKangCargoDetail" parameterType="rdata">
+		UPDATE 	inf_zcd_tms_mx
+		   SET 	bill_status = '1'
+    	 WHERE 	id 	= #{id} and hanghao = #{hanghao}
+	</update>
+	
+</mapper>
