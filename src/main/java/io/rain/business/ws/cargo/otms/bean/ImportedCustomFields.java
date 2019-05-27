@@ -81,8 +81,8 @@ public class ImportedCustomFields{
 	@XmlElement(name="customText24")
 	public String customText24;
 	
-	@XmlElement(name="customText26")
-	public String customText26;
+	@XmlElement(name="customText28")
+	public String customText28;
 	
 	@XmlElement(name="customText27")
 	public String customText27="轻货";
@@ -112,11 +112,11 @@ public class ImportedCustomFields{
 		this.customText21 = rdata.getString("customtext21");
 		this.customText22 = rdata.getString("customtext22");
 		this.customText24 = rdata.getString("customText24");
-		this.customText26 = rdata.getString("custid");
+		this.customText28 = rdata.getString("custid");
 		
-		if("KC".equals(this.customText26)){
-			this.customText26="SW";
-		}
+		/*
+		 * if("KC".equals(this.customText28)){ this.customText28="SW"; }
+		 */
 	}
 	
 	

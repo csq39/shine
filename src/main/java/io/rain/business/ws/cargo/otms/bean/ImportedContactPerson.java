@@ -3,6 +3,7 @@ package io.rain.business.ws.cargo.otms.bean;
 import javax.xml.bind.annotation.XmlElement;
 
 import io.rain.core.collection.RData;
+import io.rain.utils.string.StringUtils;
 
 /**
  * 共同代码管理
@@ -30,11 +31,17 @@ public class ImportedContactPerson{
 			this.phone = rdata.getString("shipFromContactPhone");
 			this.phoneAreaCode=rdata.getString("shipFromContactPhoneAreaCode");
 			this.mobile =rdata.getString("shipFromContactMobile");
+			if(!StringUtils.isEmpty(mobile)&&mobile.endsWith(";")) {
+				this.mobile =this.mobile.substring(0, this.mobile.length()-1);
+			}
 		}else if("shipTo".equals(type)){
 			this.name = rdata.getString("shipToContactName");
 			this.phone = rdata.getString("shipToContactPhone");
 			this.phoneAreaCode=rdata.getString("shipToContactPhoneAreaCode");
 			this.mobile =rdata.getString("shipToContactMobile");
+			if(!StringUtils.isEmpty(mobile)&&mobile.endsWith(";")) {
+				this.mobile =this.mobile.substring(0, this.mobile.length()-1);
+			}
 		}
 	}
 		
